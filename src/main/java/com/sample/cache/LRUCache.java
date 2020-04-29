@@ -43,7 +43,7 @@ public class LRUCache<K, V> implements Cache<K, V> {
 			map.put(key, value);
 			return true;
 		} catch (Exception e) {
-			return false;
+			throw new CacheException("Failed to add key",e);
 		} finally {
 			lock.unlock();
 		}
@@ -62,7 +62,10 @@ public class LRUCache<K, V> implements Cache<K, V> {
 				map.remove(key);
 				map.put(key, value);
 			}
-		} finally {
+		}
+		catch (Exception e) {
+			throw new CacheException("Failed to get key",e);
+		}finally {
 			lock.unlock();
 		}
 		return Optional.ofNullable(value);
@@ -75,7 +78,10 @@ public class LRUCache<K, V> implements Cache<K, V> {
 			try {
 				map.remove(key);
 				result = true;
-			} finally {
+			}
+			catch (Exception e) {
+				throw new CacheException("Failed to remove key",e);
+			}finally {
 				lock.unlock();
 			}
 		}
@@ -88,7 +94,10 @@ public class LRUCache<K, V> implements Cache<K, V> {
 		try {
 			map.clear();
 			result = true;
-		} finally {
+		}
+		catch (Exception e) {
+			throw new CacheException("Failed to clear cache",e);
+		}finally {
 			lock.unlock();
 		}
 		return result;
