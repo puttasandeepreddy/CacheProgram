@@ -1,4 +1,5 @@
-package com.demo.cache;
+
+package com.sample.cache;
 
 import java.util.Optional;
 
@@ -12,16 +13,12 @@ public interface Cache<K,V> {
 	   */
 	public boolean add(K key, V value);
 	
-	
-	
 	 /**
 	   * This method is used to get value from Cache. 
 	   * @param K key
 	   * @return Optional<V> value
 	   */
 	public Optional<V> get (K key);
-	
-	
 	
 	 /**
 	   * This method is used to remove value from Cache bases on key
@@ -30,12 +27,9 @@ public interface Cache<K,V> {
 	   */
 	public boolean remove(K key);
 	
-	
-	
 	 /**
 	   * This method is used all data from Cache
 	   * @return boolean. return true upon successful deletion
 	   */
 	public boolean clear();
-
 }

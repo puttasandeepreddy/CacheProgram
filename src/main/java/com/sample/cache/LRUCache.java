@@ -1,4 +1,4 @@
-package com.demo.cache;
+package com.sample.cache;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -6,12 +6,6 @@ import java.util.Optional;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-/**
- * Below implementation follows LRU (Least Recently Used) eviction policy. In
- * case of using Custom types as keys, override equals and hashcode methods in
- * that class
- * 
- */
 public class LRUCache<K, V> implements Cache<K, V> {
 
 	private LinkedHashMap<K, V> map = null;
@@ -32,36 +26,27 @@ public class LRUCache<K, V> implements Cache<K, V> {
 	 * add new element
 	 * 
 	 */
-	@Override
 	public boolean add(K key, V value) {
-
 		if (null == key || null == value) {
 			return false;
 		}
-
 		lock.lock();
-
 		try {
-
 			if (map.containsKey(key)) {
 				map.remove(key);
 			} else {
-
 				if (map.size() >= capacity) {
 					Map.Entry<K, V> firstEntry = map.entrySet().iterator().next();
 					map.remove(firstEntry.getKey());
 				}
 			}
-
 			map.put(key, value);
-
 			return true;
 		} catch (Exception e) {
 			return false;
 		} finally {
 			lock.unlock();
 		}
-
 	}
 
 	/**
@@ -69,14 +54,10 @@ public class LRUCache<K, V> implements Cache<K, V> {
 	 * recently used
 	 * 
 	 */
-	@Override
 	public Optional<V> get(K key) {
-
 		V value = map.get(key);
-
 		lock.lock();
 		try {
-
 			if (null != value) {
 				map.remove(key);
 				map.put(key, value);
@@ -87,9 +68,7 @@ public class LRUCache<K, V> implements Cache<K, V> {
 		return Optional.ofNullable(value);
 	}
 
-	@Override
 	public boolean remove(K key) {
-
 		boolean result = false;
 		if (null != key) {
 			lock.lock();
@@ -100,13 +79,10 @@ public class LRUCache<K, V> implements Cache<K, V> {
 				lock.unlock();
 			}
 		}
-
 		return result;
 	}
 
-	@Override
 	public boolean clear() {
-
 		boolean result = false;
 		lock.lock();
 		try {
@@ -115,7 +91,6 @@ public class LRUCache<K, V> implements Cache<K, V> {
 		} finally {
 			lock.unlock();
 		}
-
 		return result;
 	}
 
